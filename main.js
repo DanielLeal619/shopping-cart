@@ -21,8 +21,7 @@ async function getApi() {
         const data = await fetch(urlBase);
         const res = await data.json();
         products = JSON.parse(JSON.stringify(res));
-        productsCopy = JSON.parse(JSON.stringify(res));
-        //console.log(products);
+        productsCopy = JSON.parse(JSON.stringify(res));       
         printProducts(res);
     } catch (error) {
         console.log(error);
@@ -32,6 +31,9 @@ async function getApi() {
 function printProducts(products) {
     let html = "";
     for (let product of products) {
+        if(product.quantity === 0) {
+            continue;
+        }
         html += `
         <div class="product_card">
             <img src="${product.image}" alt="product_img" class="product_img">
@@ -50,7 +52,7 @@ function printProducts(products) {
         </div>
         </div>
         `
-    }
+    };
     productsCatalog.innerHTML = html;
     addEventsToProductButtons();
 }
@@ -75,7 +77,7 @@ function printCart(shoppingCartProducts) {
               </div>
               <div class="cart_product_right">
                 <a href="javascript:void(0)" onclick="deleteProductInCart(${product.id})">x</a>
-                <p>$${product.price}</p>            
+                <p>$${product.price*product.quantity}</p>            
               </div>
           </div>
           `;
@@ -107,7 +109,7 @@ function addEventsToProductButtons() {
 function modalWindow(event) {
     let html = "";
     if (event.target.classList.contains("add_btn_details")) {
-        const productHtml = event.target.parentElement.parentElement
+        const productHtml = event.target.parentElement.parentElement;
         const productId = productHtml.querySelector("div").querySelector("button").getAttribute("data-id");
         const selectedProduct = products.find(product => product.id == productId);
         html += `        
@@ -146,11 +148,11 @@ function toggleShoppingCart() {
 
 function addItemCart(event) {
     if (event.target.classList.contains("add_btn_main")) {
-        const productHtml = event.target.parentElement.parentElement
+        const productHtml = event.target.parentElement.parentElement;
         const productId = productHtml.querySelector("div").querySelector("button").getAttribute("data-id");
         const selectedProduct = products.find(product => product.id == productId);
         if (selectedProduct.quantity > 0) {
-            let productIndex = stockInCart.findIndex(productInCart => productInCart.id == selectedProduct.id)
+            let productIndex = stockInCart.findIndex(productInCart => productInCart.id == selectedProduct.id);
             if (productIndex !== -1) {
                 stockInCart[productIndex].quantity += 1
             } else {
@@ -158,7 +160,7 @@ function addItemCart(event) {
             }
             selectedProduct.quantity--;
         } else {            
-            alert("no hay nada")
+            alert("No hay unidades en existencia");
         }
     }
     printCart(stockInCart);
@@ -194,8 +196,8 @@ function purchaseCart() {
     }
     menuCartContainer.innerHTML = ""
     productsCopy = JSON.parse(JSON.stringify(products));
-    filterProducts()
-    alert("Tu compra ha sido realizada")
+    filterProducts();
+    alert("¡Felicidades! ¡Tu compra ha sido realizada!");
     emptyReceipt();
 }
 
@@ -207,7 +209,7 @@ function emptyReceipt() {
 
 function filterProducts() {
     const categorySelected = document.getElementById("products-filter").value;
-    const productsFilter = products.filter(product => product.category === categorySelected)
+    const productsFilter = products.filter(product => product.category === categorySelected);
     if (categorySelected !== "all") {
         printProducts(productsFilter)
     } else {
@@ -222,7 +224,7 @@ function updateCart(event, event2) {
       (productInCart) => productInCart.id == selectedProduct.id
     );
     if (selectedProduct.quantity === 0 && event2 === "add") {
-      alert("Ya no hay mas stock disponible");
+      alert("Ya no hay más stock disponible");
       return;
     }
     if (selectedProduct.quantity > 0 && event2 === "add") {
