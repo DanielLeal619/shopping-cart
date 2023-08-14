@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academlo Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.cdnfonts.com/css/helvetica-neue-55" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="nav">
+    <img src="./logos-tipografía/logo_nombre.png" alt="logo_academlo" class="nav_logo">
+    <button class="nav_btn" onclick="openSidebar()">
+      <img src="./logos-tipografía/carrito_logo.png" alt="logo_cart" class="cart_img">
+    </button>
+  </nav>
+  <section class="sidebar" id="sidebar-id">
+    <div class="bar-menu">
+      <p>Carrito</p>
+      <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">×</a> 
+    </div>
+    <hr />
+    <div class="cart">
+      <div class="cart-container">
+
+      </div>
+    </div>
+    <div class="footer">
+      <div>
+        <h1>Subtotal</h1>
+        <h2 id="subtotal">$0.00</h2>
+      </div>
+      <div>
+        <h1>IVA</h1>
+        <h2 id="iva">$0.00</h2>
+      </div>
+      <div>
+        <h1>Total</h1>
+        <h2 id="total">$0.00</h2>
+      </div>
+      <div class="buttons-container">
+        <a class="empty-cart" onclick="emptyCart()" href="javascript:void(0)">Vaciar</a>
+        <a class="purchase-button" onclick="purchaseCart()" href="javascript:void(0)">Comprar</a>
+      </div>
+    </div>
+  </section>
+  <header class="header">
+    <img src="./logos-tipografía/logo blanco.png" alt="logo_academlo_2" class="logo_academlo">
+
+  </header>
+<section class="subtitle_content">
+  <p>¡ELIGE UN PRODUCTO!</p>
+  <div>
+    <label for="products">Categorías: </label>
+    <select name="products" id="products-filter" onchange="filterProducts()">
+      <option value="all">Todos los productos</option>
+      <option value="shirt">Playeras</option>
+      <option value="hoddie">Hoddies</option>
+      <option value="sweater">Sudaderas</option>
+    </select>
+  </div>
+</section>
+  <section class="products_container" id="products-catalog">
+    <!-- Cajas de los Productos -->
+  </section>
+  <div class="modal_window_general"></div>
+  <script src="main.js"></script>
+</body>
+
+</html>
