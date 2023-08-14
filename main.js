@@ -11,7 +11,7 @@ let ivaHtml = document.getElementById("iva");
 
 initializePage();
 
-function initializePage(){
+function initializePage() {
     getApi();
     printCart(stockInCart);
 }
@@ -59,42 +59,53 @@ function printCart(shoppingCartProducts) {
     let subtotal = 0;
     let html = "";
     if (shoppingCartProducts.length > 0) {
-        for (let product of shoppingCartProducts) {
-            html += `
-        <div class="menu_shopping_cart"> 
-            <img src="${product.image}" alt="product_photo" class="img_in_cart">
-            <div class="text_in_cart">
-            <p class="prouct_name_cart">${product.name}</p>            
-            <p class="product_price_cart">Precio: $${product.price}</p>            
-            <p class="product_stock_cart">Unidades: ${product.quantity}</p>
-            </div>
-        </div>
-        `;
-            subtotal += Number(product.price) * Number(product.quantity);
-        }
-        //console.log(html)
-        menuCartContainer.innerHTML = html;
-        subtotalHtml.innerHTML = "$" + subtotal;
-        totalHtml.innerHTML = "$" + (subtotal * 1.16).toFixed(2);
-        ivaHtml.innerHTML = "$" + (subtotal * 0.16).toFixed(2);        
+      for (let product of shoppingCartProducts) {
+        html += `
+          <div class="menu_shopping_cart"> 
+              <img src="${product.image}" alt="product_photo" class="img_in_cart">
+              <div class="text_in_cart">
+                  <p class="product_name">${product.name}</p>
+                  <div class="manage_quantity">            
+                    <a href="javascript:void(0)" onclick="updateCart(${product.id},'subtract')">-</a>
+                    <div>
+                      <p>${product.quantity}</p>
+                    </div>
+                    <a href="javascript:void(0)" onclick="updateCart(${product.id},'add')">+</a>
+                  </div>
+              </div>
+              <div class="cart_product_right">
+                <a href="javascript:void(0)" onclick="deleteProductInCart(${product.id})">x</a>
+                <p>$${product.price}</p>            
+              </div>
+          </div>
+          `;
+        subtotal += Number(product.price) * Number(product.quantity);
+      }
+      menuCartContainer.innerHTML = html;
+      subtotalHtml.innerHTML = "$" + subtotal;
+      totalHtml.innerHTML = "$" + (subtotal * 1.16).toFixed(2);
+      ivaHtml.innerHTML = "$" + (subtotal * 0.16).toFixed(2);
     } else {
-        console.log("selecciona algo")
+      menuCartContainer.innerHTML = html;
+      subtotalHtml.innerHTML = "$" + subtotal;
+      totalHtml.innerHTML = "$0.00";
+      ivaHtml.innerHTML = "$0.00";
     }
 }
 
-function addEventsToProductButtons() {    
+function addEventsToProductButtons() {
     const btnsAddToCart = document.querySelectorAll(".add_btn_main");
     for (i of btnsAddToCart) {
-      i.addEventListener("click", addItemCart);
-    }   
+        i.addEventListener("click", addItemCart);
+    }
     const btnsToggleDetails = document.querySelectorAll(".add_btn_details");
     for (i of btnsToggleDetails) {
-      i.addEventListener("click", modalWindow);
+        i.addEventListener("click", modalWindow);
     }
 }
 
-function modalWindow(event) {     
-    let html = "";   
+function modalWindow(event) {
+    let html = "";
     if (event.target.classList.contains("add_btn_details")) {
         const productHtml = event.target.parentElement.parentElement
         const productId = productHtml.querySelector("div").querySelector("button").getAttribute("data-id");
@@ -113,10 +124,10 @@ function modalWindow(event) {
         <div class="modal_details">Descripción: ${selectedProduct.description}</div>      
         </div>   
         </div>    
-        `        
-}
+        `
+    }
     modalWindowDetails.style.display = "flex";
-    modalWindowDetails.innerHTML = html; 
+    modalWindowDetails.innerHTML = html;
 
 }
 
@@ -133,7 +144,7 @@ function toggleShoppingCart() {
     }
 }
 
-function addItemCart(event) {    
+function addItemCart(event) {
     if (event.target.classList.contains("add_btn_main")) {
         const productHtml = event.target.parentElement.parentElement
         const productId = productHtml.querySelector("div").querySelector("button").getAttribute("data-id");
@@ -146,8 +157,7 @@ function addItemCart(event) {
                 stockInCart.push({ ...selectedProduct, quantity: 1 });
             }
             selectedProduct.quantity--;
-        } else {
-            console.log("No hay producto");
+        } else {            
             alert("no hay nada")
         }
     }
@@ -184,7 +194,7 @@ function purchaseCart() {
     }
     menuCartContainer.innerHTML = ""
     productsCopy = JSON.parse(JSON.stringify(products));
-    printProducts(products)
+    filterProducts()
     alert("Tu compra ha sido realizada")
     emptyReceipt();
 }
@@ -204,3 +214,41 @@ function filterProducts() {
         printProducts(products);
     }
 }
+
+function updateCart(event, event2) {
+    const selectedProduct = products.find((product) => product.id == event);
+    const selectedProduct2 = stockInCart.find((product) => product.id == event);
+    const productIndex = stockInCart.findIndex(
+      (productInCart) => productInCart.id == selectedProduct.id
+    );
+    if (selectedProduct.quantity === 0 && event2 === "add") {
+      alert("Ya no hay mas stock disponible");
+      return;
+    }
+    if (selectedProduct.quantity > 0 && event2 === "add") {
+      stockInCart[productIndex].quantity += 1;
+      selectedProduct.quantity--;
+    } else if (selectedProduct2.quantity > 0 && event2 === "subtract") {
+      if (selectedProduct2.quantity === 1) {
+        stockInCart.splice(productIndex, 1);
+      } else {
+        stockInCart[productIndex].quantity--;
+      }
+      selectedProduct.quantity++;
+    }
+    printCart(stockInCart);
+  }
+  
+  function deleteProductInCart(productId) {
+    const selectedProduct = stockInCart.find(
+      (product) => product.id == productId
+    );
+    const productIndex = stockInCart.findIndex(
+      (productInCart) => productInCart.id == selectedProduct.id
+    );
+    stockInCart.splice(productIndex, 1);
+  
+    products.find((product) => product.id === productId).quantity +=
+      selectedProduct.quantity;
+    printCart(stockInCart);
+  }

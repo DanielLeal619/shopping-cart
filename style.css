@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/helvetica-neue-5');
+
 * {
     margin: 0;
     padding: 0;
@@ -49,8 +51,22 @@ body {
 
 .menu_shopping_cart {
     display: flex;
+    flex-direction: row;
+    align-items: center;
     padding: 10px;
-    background-color: #EB4A5A;
+    background-color: #F9FAFC;
+}
+
+.menu_shopping_cart a {
+    text-decoration: none;
+    text-align: center;
+    color: #434343;
+    font-size: 24px;
+    transition: 0.3s;
+}
+
+.menu_shopping_cart a:hover {
+    color: #d5d5d5;
 }
 
 .img_in_cart {
@@ -59,10 +75,24 @@ body {
 }
 
 .text_in_cart {
+    max-width: 350px;
+    width: 350px;
+    max-height: 100px;
+    min-height: 100px;
+    padding: 10px 50px 10px 20px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items:flex-start;
 }
 
+.text_in_cart p {
+    color: #434343;
+}
+
+.text_in_cart .product_name {
+    font-weight: 600;
+}
 .sidebar {    
     font-size: 16px;
     color: #434343;
@@ -127,6 +157,11 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+}
+
+.footer h1, h2 {
+    color: #434343;
+    font-size: 20px;
 }
 
 .sidebar .footer .buttons-container {
@@ -216,6 +251,59 @@ body {
 
 .product_card_stock {
     margin-bottom: 10px;
+}
+
+.product_card_footer {    
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-around;    
+    width: 100%;
+    height: 30px;  
+}
+
+.cart_product_right {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.manage_quantity {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 100px;
+    min-width: 100px;
+}
+
+.manage_quantity a {
+    text-align: center;
+    height: 30px;
+    width: 30px;
+    background-color: rgb(216, 216, 216);
+}
+
+.manage_quantity div {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.manage_quantity p {
+    text-align: center;
+}
+
+@media screen and (max-width < 1000px) {
+    .text_in_cart {
+        max-width: 200px;
+    }
 }
 
 /* Card Buttons */
